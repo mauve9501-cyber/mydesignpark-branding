@@ -581,6 +581,10 @@
       </div>
       <ol>
         <li>
+          <div class="yr">2026</div>
+          <div><h5>천재교과서 디자인 공모전 입선</h5><p>천재교과서 주관 디자인 공모전 입선 수상</p></div>
+        </li>
+        <li>
           <div class="yr">2011–2025</div>
           <div><h5>VIDAK 국제 교류전</h5><p>한국시각정보디자인협회 주관 국제 초대전 다수 참여</p></div>
         </li>
@@ -675,9 +679,8 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // ---- Supabase contact form submission ----
-  const SUPABASE_URL = "https://uvvvslwqwaysgawdhvls.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_Fj5iUlb3pK8z9oYcM0NVsA_XLX9Ses8";
+  // ---- Web3Forms contact form submission (이메일 발송) ----
+  const WEB3FORMS_KEY = "c2b218d9-5b5e-4095-9fa2-4b011a5dfcc2";
 
   const form = document.getElementById('contact-form');
   const msgEl = document.getElementById('form-msg');
@@ -701,24 +704,29 @@
     msgEl.className = 'form-msg';
 
     try {
-      const res = await fetch(SUPABASE_URL + '/rest/v1/contacts', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY,
-          'Prefer': 'return=minimal'
+          'Accept': 'application/json'
         },
-        body: JSON.stringify({ name, email, message })
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: '[포트폴리오 문의] ' + name + '님',
+          from_name: '박미영 포트폴리오',
+          name: name,
+          email: email,
+          message: message
+        })
       });
+      const data = await res.json().catch(function(){ return {}; });
 
-      if(res.ok){
+      if(res.ok && data.success){
         msgEl.textContent = '문의가 정상적으로 전송되었습니다. 감사합니다.';
         msgEl.className = 'form-msg ok';
         form.reset();
       } else {
-        const errText = await res.text();
-        console.error('Supabase insert failed:', res.status, errText);
+        console.error('Web3Forms submit failed:', res.status, data);
         msgEl.textContent = '전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
         msgEl.className = 'form-msg err';
       }
