@@ -70,7 +70,22 @@
     position:relative; padding:180px 0 120px; overflow:hidden;
     border-bottom:1px solid var(--line);
   }
+  /* full-bleed geometric motif behind hero text — full artwork shown evenly */
+  .hero-bg{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:url("hero-motif.svg") center center / contain no-repeat;
+    opacity:0.22;
+  }
+  /* even, light veil over the motif: keeps text legible without weighting one side */
+  .hero-scrim{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:rgba(242,239,235,0.34);
+  }
   .hero .wrap{position:relative; z-index:2;}
+  @media (max-width:760px){
+    .hero-bg{opacity:0.2; background-position:center top; background-size:200% auto;}
+    .hero-scrim{background:rgba(242,239,235,0.5);}
+  }
   .hero-kicker{font-size:14px; letter-spacing:0.3em; text-transform:uppercase; color:var(--mauve-deep); font-weight:600; margin-bottom:22px;}
   .hero h1{
     font-size:clamp(40px, 7vw, 88px); line-height:1.08; margin-bottom:26px;
@@ -276,6 +291,8 @@
 
   <!-- HERO -->
   <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-scrim"></div>
     <div class="wrap">
       <div class="hero-kicker">Editorial Design · Brand Identity · Story Content</div>
       <h1>전통의 문법으로<br>오늘의 브랜드를 짓다
